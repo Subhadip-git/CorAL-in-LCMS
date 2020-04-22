@@ -130,13 +130,19 @@ void COSCARAccumulator::setCOMVariables( const COSCARLine& p1, const COSCARLine&
     double g[4]={1.,-1.,-1.,-1.};
     for (int i=0;i<4;++i){
         q_lab[i]   = 0.5*(p1.p[i]-p2.p[i]);  // relative mom. is 1/2 the mom. diff. of pair
-        P_lab[i]   = p1.p[i]+p2.p[i];        // total mom. is total of pair mom.
+        P_lab[i]   = p1.p[i]+p2.p[i];      // total mom. is total of pair mom.
         r_lab[i]   = (p1.x[i]-p2.x[i]);
         r_cm[i]    = 0.0;
         q_cm[i]    = 0.0;
         PSquared   += P_lab[i]*P_lab[i]*g[i];
     }
-    for(int i=0;i<4;++i){beta[i] = g[i]*P_lab[i]/sqrt(PSquared);}
+    double velo = P_lab[3]/P_lab[0];
+    beta[0] = 1.0/sqrt(1.0-velo*velo);
+    beta[3] = g[3]*beta[0]*velo;
+    beta[1] = 0.;
+    beta[2] = 0.;
+
+    Misc::lorentz( beta, P_lab, P_lab);
     Misc::lorentz( beta, q_lab, q_cm );
     Misc::lorentz( beta, r_lab, r_cm );
     // Loop over space-part of variable

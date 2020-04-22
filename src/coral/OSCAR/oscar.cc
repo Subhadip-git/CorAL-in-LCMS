@@ -118,9 +118,13 @@ CSourceFtn1dHisto getOSCARSource1d(vector<COSCARLine> lines, parameterMap p){
             for (int i=0;i<4;++i){
                 q_lab[i]=0.5*(p1->p[i]-p2->p[i]);  // relative mom. is 1/2 the mom. diff. of pair
                 P[i]=p1->p[i]+p2->p[i];            // total mom. is total of pair mom.
-                beta[i]=P[i]/P[0];
                 sep_lab[i]=(p1->x[i]-p2->x[i]);
             }
+	    beta[0] = P[0]/P[0];
+	    beta[3] = P[3]/P[0];
+	    beta[1] = 0.;
+	    beta[2] = 0.;
+	    Misc::lorentz(beta,P,P);
             Misc::lorentz(beta,q_lab,q_cm);
             sqr_beta=beta[0]*beta[0];
             sqr_q_cm=q_cm[0]*q_cm[0];
@@ -203,10 +207,15 @@ CSourceFtn3dHisto getOSCARSource3d(vector<COSCARLine> lines, parameterMap p){
             for (int i=0;i<4;++i){
                 q_lab[i]=0.5*(p1->p[i]-p2->p[i]);  // relative mom. is 1/2 the mom. diff. of pair
                 P[i]=p1->p[i]+p2->p[i];            // total mom. is total of pair mom.
-                beta[i]=P[i]/P[0];
                 sep_lab[i]=(p1->x[i]-p2->x[i]);
             }
+	    beta[0] = P[0]/P[0];
+	    beta[3] = P[3]/P[0];
+	    beta[1] = 0.;
+	    beta[2] = 0.;
+
             Misc::lorentz(beta,q_lab,q_cm);
+	    Misc::lorentz(beta,P,P);
             sqr_beta=beta[0]*beta[0];
             sqr_q_cm=q_cm[0]*q_cm[0];
             for (int i=1; i<4; ++i) {
